@@ -15,4 +15,15 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    host: true, // ← listen 0.0.0.0 docker
+    port: 5173,
+    strictPort: true,
+    watch: {
+      usePolling: true, // ← pour live reload docker
+    },
+    hmr: {
+      clientPort: 5173, // ← port exposé
+    },
+  },
 })

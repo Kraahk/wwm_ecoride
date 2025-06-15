@@ -2,17 +2,13 @@
 FROM node:24-alpine AS builder
 
 WORKDIR /app
+COPY package*.json ./
+RUN npm install
+
 COPY . .
 
-RUN npm install
-RUN npm run build
+EXPOSE 5173
 
-# Étape 2 : servir les fichiers statiques avec nginx
-FROM nginx:alpine
+ENV CHOKIDAR_USEPOLLING=true
 
-# Copier les fichiers de build dans nginx
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Remplacer la config nginx si besoin (optionnel)
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "dev"]
