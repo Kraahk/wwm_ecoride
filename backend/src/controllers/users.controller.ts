@@ -11,8 +11,8 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
       data: {
         pseudo,
         email,
-        password // ⚠️ à chiffrer avec bcrypt en production
-      }
+        password, // ⚠️ à chiffrer avec bcrypt en production
+      },
     });
 
     res.status(201).json(user);
