@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 // import { PrismaClient } from '@prisma/client';
 import connectMongo from './db/mongo.js';
 import userRoutes from './routes/users.routes.js';
+import { createExpressMiddleware } from '@trpc/server/adapters/express';
+import { appRouter } from './trpc/index.js';
 
 dotenv.config();
 
@@ -15,10 +17,18 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(
   cors({
-    origin: 'http://localhost:5173', // ou l’URL exacte de ton frontend
+    origin: 'http://localhost:5173', // URL frontend
     credentials: true,
   }),
 );
+
+app.use(
+  '/trpc',
+  createExpressMiddleware({
+    router: appRouter,
+  }),
+);
+
 connectMongo();
 
 app.use('/api/users', userRoutes);

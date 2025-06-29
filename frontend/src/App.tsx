@@ -1,5 +1,4 @@
-import React from 'react';
-
+import { Hello } from './components/Test';
 function App() {
   const handleClick = async () => {
     try {
@@ -20,6 +19,7 @@ function App() {
       >
         Tester l’API
       </button>
+      <Hello />
     </div>
   );
 }

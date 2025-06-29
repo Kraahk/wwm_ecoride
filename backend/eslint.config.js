@@ -27,9 +27,9 @@ export default defineConfig([
     },
   },
   {
-  files: ['eslint.config.js'],
-  languageOptions: {
-    parser: null // ⛔️ n'utilise pas le parser TS pour ce fichier
-  }
-}
+    files: ['eslint.config.js'],
+    languageOptions: {
+      parser: null, // ⛔️ n'utilise pas le parser TS pour ce fichier
+    },
+  },
 ]);
