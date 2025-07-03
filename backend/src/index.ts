@@ -14,14 +14,20 @@ const app = express();
 // const prisma = new PrismaClient();
 const PORT = process.env.PORT || 5000;
 
-app.use(express.json());
 app.use(
   cors({
     origin: 'http://localhost:5173', // URL frontend
     credentials: true,
   }),
 );
-
+app.options(
+  '*',
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  }),
+);
+app.use(express.json());
 app.use(
   '/trpc',
   createExpressMiddleware({
@@ -30,6 +36,7 @@ app.use(
 );
 
 connectMongo();
+console.log('userRoutes loaded:', typeof userRoutes); // doit afficher "function"
 
 app.use('/api/users', userRoutes);
 
@@ -44,3 +51,12 @@ app.listen(PORT, () => {
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
+// Debug des routes Express
+console.log('🧭 Routes Express enregistrées :');
+(app._router?.stack || [])
+  .filter((layer: any) => layer.route)
+  .forEach((layer: any) => {
+    const method = Object.keys(layer.route.methods)[0].toUpperCase();
+    const path = layer.route.path;
+    console.log(`- ${method} ${path}`);
+  });

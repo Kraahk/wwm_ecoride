@@ -1,24 +1,22 @@
-# Étape 1 — Build
-FROM node:24-alpine AS builder
+FROM node:24-bookworm-slim AS builder
 
 WORKDIR /app
 
-# Installer les dépendances
+# Copier les fichiers nécessaires
 COPY package*.json ./
 COPY prisma ./prisma
+
+# Installer les dépendances
 RUN npm install
 
-
-# Copier le code source
+# Copier le reste du code
 COPY . .
 
-# Générer Prisma Client dans l'image (Linux)
+# Générer Prisma Client
 RUN npx prisma generate --schema=./prisma/schema.prisma
 
-
-# Pour le hot reload
-RUN npm install -D ts-node-dev
-
+# Port exposé
 EXPOSE 5000
 
-CMD ["npm", "run", "dev"]
+# Lancer en mode dev avec ESM + ts-node
+CMD ["node", "--loader", "ts-node/esm", "src/index.ts"]
